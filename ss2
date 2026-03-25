@@ -1,0 +1,53 @@
+import subprocess
+
+def run_nmap_scan(target, scan_type):
+    try:
+        if scan_type == 1:
+            command = ["nmap", "-sn", target]  # Host Discovery
+        elif scan_type == 2:
+            command = ["nmap", "-p", "1-1000", target]  # Port Scan
+        elif scan_type == 3:
+            command = ["nmap", "-sV", target]  # Service Version
+        elif scan_type == 4:
+            command = ["nmap", "-O", target]  # OS Detection
+        else:
+            print("Invalid scan type!")
+            return
+
+        print(f"\n[*] Running Scan: {' '.join(command)}\n")
+
+        # Execute the command
+        result = subprocess.run(command, capture_output=True, text=True)
+
+        # Print output
+        print("--- Scan Results ---")
+        print(result.stdout)
+
+        if result.stderr:
+            print("--- Errors ---")
+            print(result.stderr)
+
+    except Exception as e:
+        print(f"Error: {e}")
+
+
+def main():
+    print("=== Nmap Scanner Tool ===")
+
+    target = input("Enter target IP or range (e.g., 192.168.1.1): ")
+
+    print("\nSelect Scan Type:")
+    print("1. Host Discovery (-sn)")
+    print("2. Port Scan (1-1000)")
+    print("3. Service Version (-sV)")
+    print("4. OS Detection (-O)")
+
+    try:
+        choice = int(input("Enter choice (1-4): "))
+        run_nmap_scan(target, choice)
+    except ValueError:
+        print("Please enter a valid number!")
+
+
+if __name__ == "__main__":
+    main()
